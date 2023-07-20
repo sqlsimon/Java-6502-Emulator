@@ -72,6 +72,11 @@ public class OptionsPane extends JFrame implements ActionListener {
     JLabel BackgroundColorLabel = new JLabel("Background Color");
     JTextField BackgroundColorChooser = new JTextField("#"+Integer.toHexString(data.bgColor.getRGB()).substring(2));
 
+    JLabel WindowSizeLabel = new JLabel("Window size (width x height)");
+    JTextField WindowXSizeValue = new JTextField(""+data.WindowXSize);
+    JTextField WindowYSizeValue = new JTextField(""+data.WindowYSize);
+
+
     int VRAMSize;
     JLabel VRAMSizeLabel = new JLabel("("+VRAMSize+"bytes)");
     JLabel VRAMRangeLabel = new JLabel("VRAM Range: $"+Integer.toHexString(data.GPUBufferBegin)+"-$"+Integer.toHexString(data.GPUBufferBegin+VRAMSize-1));
@@ -80,7 +85,7 @@ public class OptionsPane extends JFrame implements ActionListener {
     JButton saveOptionsButton = new JButton("Save Options to File");
 	
 	public OptionsPane() {
-		this.setSize(700,700);
+		this.setSize(700,760);
 		t = new Timer(16,this);
 		t.start();
 
@@ -137,6 +142,9 @@ public class OptionsPane extends JFrame implements ActionListener {
         SwingComponentsList.add(LCDModeLabel);
         SwingComponentsList.add(LCDModeRadioLarge);
         SwingComponentsList.add(LCDModeRadioSmall);
+        SwingComponentsList.add(WindowSizeLabel);
+        SwingComponentsList.add(WindowXSizeValue);
+        SwingComponentsList.add(WindowYSizeValue);        
 
         this.setTitle("Options");
 		this.setContentPane(p);
@@ -327,6 +335,9 @@ public class OptionsPane extends JFrame implements ActionListener {
 
         LCDModeRadioSmall.setSelected(!data.lcdBigMode);
         LCDModeRadioLarge.setSelected(data.lcdBigMode);
+
+        WindowXSizeValue.setText(""+data.WindowXSize);
+        WindowYSizeValue.setText(""+data.WindowYSize);
     }
 
     private void writeDataToFile(File f) {
@@ -355,6 +366,8 @@ public class OptionsPane extends JFrame implements ActionListener {
         data.bgColor = Color.decode(BackgroundColorChooser.getText());
         data.GPUBitmapPixelScale = Integer.parseInt(GPUBitmapPixelScaleTextField.getText());
         data.keyboardLocation = Integer.parseInt(KeyboardLocationTextField.getText());
+        data.WindowXSize = Integer.parseInt(WindowXSizeValue.getText());
+        data.WindowYSize = Integer.parseInt(WindowYSizeValue.getText());
 
         Bus.VIA_ADDRESS = data.VIA_Address;
         boolean gpuWasVisible = EaterEmulator.gpu.isVisible();
@@ -433,7 +446,16 @@ public class OptionsPane extends JFrame implements ActionListener {
         BackgroundColorLabel.setBounds(175,560,125,25);
         BackgroundColorChooser.setBounds(300,560,100,25);
 
-        applyOptionsButton.setBounds(200,625,150,25);
-        saveOptionsButton.setBounds(350,625,150,25);
+        WindowSizeLabel.setBounds(100,600,250,25);
+        WindowXSizeValue.setBounds(300,600,125,25);;
+        WindowYSizeValue.setBounds(435,600,125,25);;        
+
+
+        applyOptionsButton.setBounds(200,645,150,25);
+        saveOptionsButton.setBounds(350,645,150,25);
+
+
+
+
     }
 }

@@ -48,7 +48,8 @@ public class EaterEmulator extends JFrame implements ActionListener {
 	public EaterEmulator() {
 		//Swing Stuff:
 		System.setProperty("sun.java2d.opengl", "true");
-		this.setSize(1920,1080);
+		//this.setSize(1920,1080);
+		this.setSize(options.data.WindowXSize,options.data.WindowYSize);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}catch(Exception ex) {

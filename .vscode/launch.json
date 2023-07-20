@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "EaterEmulator",
+            "request": "launch",
+            "mainClass": "EaterEmulator",
+            "projectName": "Java-6502-Emulator_9058b089"
+        },
+        {
+            "type": "java",
             "name": "Launch LCD",
             "request": "launch",
             "mainClass": "LCD",

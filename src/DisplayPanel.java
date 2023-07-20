@@ -26,10 +26,13 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
 		clocksPerSecondCheckTimer.start();
 		frameTimer.start();
 		setBackground(bgColor);
-		setPreferredSize(new Dimension(1936, 966));
+		//setPreferredSize(new Dimension(1936, 966));
+		//setPreferredSize(new Dimension(1700, 736));
+
+
 
 		try {
-			courierNewBold = Font.createFont(Font.TRUETYPE_FONT,this.getClass().getClassLoader().getResourceAsStream("courbd.ttf")).deriveFont(20f);
+			courierNewBold = Font.createFont(Font.TRUETYPE_FONT,this.getClass().getClassLoader().getResourceAsStream("CascadiaMono.ttf")).deriveFont(16f);
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			ge.registerFont(courierNewBold);
 		} catch (FontFormatException | IOException e) {
@@ -63,19 +66,19 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
         
         //Version
         g.setFont(courierNewBold);
-        g.drawString("v"+EaterEmulator.versionString+" (c) Dylan Speiser", 7, 1033);
+        g.drawString("v"+EaterEmulator.versionString+" (c) Dylan Speiser", rightAlignHelper-564, EaterEmulator.options.data.WindowYSize-65);
         
         //Clocks
         g.drawString("Clocks: "+EaterEmulator.clocks, 40, 80);
         g.drawString("Speed: "+EaterEmulator.cpu.ClocksPerSecond+" Hz"+(EaterEmulator.slowerClock ? " (Slow)" : ""), 40, 110);
         
         //PAGE INDICATORS
-        g.drawString("(K) <-- "+ROMLoader.byteToHexString((byte)(romPage+0x80))+" --> (L)", rightAlignHelper-304, Math.max(getHeight()-91, 920));
-        g.drawString("(H) <-- "+ROMLoader.byteToHexString((byte)ramPage)+" --> (J)", rightAlignHelper-704, Math.max(getHeight()-91, 920));
+        g.drawString("(K) <-- "+ROMLoader.byteToHexString((byte)(romPage+0x80))+" --> (L)", rightAlignHelper-404, Math.max(getHeight()-91, EaterEmulator.options.data.WindowYSize-100));
+        g.drawString("(H) <-- "+ROMLoader.byteToHexString((byte)ramPage)+" --> (J)", rightAlignHelper-724, Math.max(getHeight()-91, EaterEmulator.options.data.WindowYSize-100));
         
         //ROM
-        g.drawString("ROM", rightAlignHelper-214, 130);
-        drawString(g,romPageString, rightAlignHelper-379, 150);
+        g.drawString("ROM", rightAlignHelper-324, 130);
+        drawString(g,romPageString, rightAlignHelper-459, 150);
         
         //Stack Pointer Underline
         if (ramPage == 1) {
@@ -85,7 +88,7 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
         }
         
         //RAM
-        g.drawString("RAM", rightAlignHelper-624, 130);
+        g.drawString("RAM", rightAlignHelper-654, 130);
         drawString(g,ramPageString, rightAlignHelper-779, 150);
         
 	
@@ -96,7 +99,7 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
         g.drawString("Y: "+ROMLoader.padStringWithZeroes(Integer.toBinaryString(Byte.toUnsignedInt(EaterEmulator.cpu.y)), 8)+" ("+ROMLoader.byteToHexString(EaterEmulator.cpu.y)+")", 35, 230);
         g.drawString("Stack Pointer: "+ROMLoader.padStringWithZeroes(Integer.toBinaryString(Byte.toUnsignedInt(EaterEmulator.cpu.stackPointer)), 8)+" ("+ROMLoader.byteToHexString(EaterEmulator.cpu.stackPointer)+")", 35, 260);
         g.drawString("Program Counter: "+ROMLoader.padStringWithZeroes(Integer.toBinaryString(Short.toUnsignedInt(EaterEmulator.cpu.programCounter)), 16)+" ("+ROMLoader.padStringWithZeroes(Integer.toHexString(Short.toUnsignedInt(EaterEmulator.cpu.programCounter)).toUpperCase(),4)+")", 35, 290);
-        g.drawString("Flags:             ("+ROMLoader.byteToHexString(EaterEmulator.cpu.flags)+")", 35, 320);
+        g.drawString("Flags:                ("+ROMLoader.byteToHexString(EaterEmulator.cpu.flags)+")", 35, 320);
         
         g.drawString("Absolute Address: "+ROMLoader.padStringWithZeroes(Integer.toBinaryString(Short.toUnsignedInt(EaterEmulator.cpu.addressAbsolute)), 16)+" ("+ROMLoader.byteToHexString((byte)(EaterEmulator.cpu.addressAbsolute/0xFF))+ROMLoader.byteToHexString((byte)EaterEmulator.cpu.addressAbsolute)+")", 35, 350);
         g.drawString("Relative Address: "+ROMLoader.padStringWithZeroes(Integer.toBinaryString(Short.toUnsignedInt(EaterEmulator.cpu.addressRelative)), 16)+" ("+ROMLoader.byteToHexString((byte)(EaterEmulator.cpu.addressRelative/0xFF))+ROMLoader.byteToHexString((byte)EaterEmulator.cpu.addressRelative)+")", 35, 380);
@@ -107,7 +110,7 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
         String flagsString = "NVUBDIZC";
         for (char c : ROMLoader.padStringWithZeroes(Integer.toBinaryString(Byte.toUnsignedInt(EaterEmulator.cpu.flags)),8).toCharArray()) {
         	g.setColor((c == '1') ? Color.green : Color.red);
-        	g.drawString(String.valueOf(flagsString.charAt(counter)), 120+16*counter, 320);
+        	g.drawString(String.valueOf(flagsString.charAt(counter)), 100+16*counter, 320);
         	counter++;
         }
         
@@ -123,19 +126,21 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
         g.drawString("   IER: "+ROMLoader.padStringWithZeroes(Integer.toBinaryString(Byte.toUnsignedInt(EaterEmulator.via.IER)), 8)+" ("+ROMLoader.byteToHexString(EaterEmulator.via.IER)+")", 35, 700);
         
         //Controls
-
+		g.setColor(Color.YELLOW);
 		if (!EaterEmulator.keyboardMode) {
-	        g.drawString("Controls:", 50, 750);
-	        g.drawString("C - Toggle Clock", 35, 780);
-	        g.drawString("Space - Pulse Clock", 35, 810);
-	        g.drawString("R - Reset", 35, 840);
-	        g.drawString("S - Toggle Slower Clock", 35, 870);
-	        g.drawString("I - Trigger VIA CA1", 35, 900);
+	        g.drawString("Controls:", 350, 490);
+	        g.drawString("C - Toggle Clock", 300, 520);
+	        g.drawString("Space - Pulse Clock", 300, 550);
+	        g.drawString("R - Reset", 300, 580);
+	        g.drawString("S - Toggle Slower Clock", 300, 610);
+	        g.drawString("I - Trigger VIA CA1", 300, 640);
+			g.drawString("T - Step Clock", 300, 670);
 		} else {
-			g.drawString("Keyboard Mode Controls:", 50, 750);
-			g.drawString("Typing a key will write that key code to the memory location "+EaterEmulator.options.KeyboardLocationHexLabel.getText().substring(3), 35, 780);
-			g.drawString(" and trigger an interrupt.", 35, 810);
+			g.drawString("Keyboard Mode Controls:", 35, 760);
+			g.drawString("Typing a key will write that key code to the memory location "+EaterEmulator.options.KeyboardLocationHexLabel.getText().substring(3), 35, 790);
+			g.drawString(" and trigger an interrupt.", 35, 820);
 		}
+		g.setColor(fgColor);
 	}
 	
 	public static void drawString(Graphics g, String text, int x, int y) {
@@ -146,6 +151,11 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
 	public void resetGraphics() {
 		bgColor = EaterEmulator.options.data.bgColor;
 		fgColor = EaterEmulator.options.data.fgColor;
+		
+		// sets the size of the window contents, but not the window
+		//this.setSize(EaterEmulator.options.data.WindowXSize,EaterEmulator.options.data.WindowYSize);
+		//EaterEmulator.getWindows()[1].setSize(EaterEmulator.options.data.WindowXSize,EaterEmulator.options.data.WindowYSize);
+	
 		setBackground(bgColor);
 	}
 
@@ -154,14 +164,15 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
 		if (e.getSource().equals(frameTimer)) {
 
 			EaterEmulator.running = true;
+			int rightOffSet = 0;
 			
 			ramPageString = EaterEmulator.ram.RAMString.substring(ramPage*960,(ramPage+1)*960);
-			EaterEmulator.ROMopenButton.setBounds(rightAlignHelper-150, 15, 125, 25);
-			EaterEmulator.RAMopenButton.setBounds(rightAlignHelper-150, 45, 125, 25);
-			EaterEmulator.ShowLCDButton.setBounds(rightAlignHelper-300, 15, 125, 25);
-			EaterEmulator.ShowGPUButton.setBounds(rightAlignHelper-300, 45, 125, 25);
-			EaterEmulator.optionsButton.setBounds(rightAlignHelper-450, 15, 125, 25);
-			EaterEmulator.keyboardButton.setBounds(rightAlignHelper-450, 45, 125, 25);
+			EaterEmulator.ROMopenButton.setBounds(rightAlignHelper-rightOffSet-450, 15, 125, 25);
+			EaterEmulator.RAMopenButton.setBounds(rightAlignHelper-rightOffSet-450, 45, 125, 25);
+			EaterEmulator.ShowLCDButton.setBounds(rightAlignHelper-rightOffSet-600, 15, 125, 25);
+			EaterEmulator.ShowGPUButton.setBounds(rightAlignHelper-rightOffSet-600, 45, 125, 25);
+			EaterEmulator.optionsButton.setBounds(rightAlignHelper-rightOffSet-750, 15, 125, 25);
+			EaterEmulator.keyboardButton.setBounds(rightAlignHelper-rightOffSet-750, 45, 125, 25);
 			this.repaint();
 
 			if (!EaterEmulator.options.isVisible())
