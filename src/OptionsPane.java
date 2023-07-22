@@ -81,6 +81,11 @@ public class OptionsPane extends JFrame implements ActionListener {
     JLabel VRAMSizeLabel = new JLabel("("+VRAMSize+"bytes)");
     JLabel VRAMRangeLabel = new JLabel("VRAM Range: $"+Integer.toHexString(data.GPUBufferBegin)+"-$"+Integer.toHexString(data.GPUBufferBegin+VRAMSize-1));
 
+    int StepSizeSecs;
+    JLabel StepSizeSecsLabel = new JLabel("Clock step size (secs)");
+    JTextField StepSizeSecsValue = new JTextField(""+data.StepSizeSecs);
+
+
     JButton applyOptionsButton = new JButton("Apply Options");
     JButton saveOptionsButton = new JButton("Save Options to File");
 	
@@ -99,8 +104,8 @@ public class OptionsPane extends JFrame implements ActionListener {
         optionsFile = new File(data.defaultSaveDirectory+"options.pref");
 
         writeDataToFile(new File(data.defaultSaveDirectory+"defaults.pref"));
-        readDataFromFile(optionsFile);
-        writeDataToFile(optionsFile);
+        //readDataFromFile(optionsFile);
+        //writeDataToFile(optionsFile);
 
 		fc.setVisible(false);
 		fc.setDirectory(data.defaultFileChooserDirectory);
@@ -144,7 +149,9 @@ public class OptionsPane extends JFrame implements ActionListener {
         SwingComponentsList.add(LCDModeRadioSmall);
         SwingComponentsList.add(WindowSizeLabel);
         SwingComponentsList.add(WindowXSizeValue);
-        SwingComponentsList.add(WindowYSizeValue);        
+        SwingComponentsList.add(WindowYSizeValue);  
+        SwingComponentsList.add(StepSizeSecsLabel);
+        SwingComponentsList.add(StepSizeSecsValue);      
 
         this.setTitle("Options");
 		this.setContentPane(p);
@@ -338,6 +345,8 @@ public class OptionsPane extends JFrame implements ActionListener {
 
         WindowXSizeValue.setText(""+data.WindowXSize);
         WindowYSizeValue.setText(""+data.WindowYSize);
+
+        StepSizeSecsValue.setText(""+data.StepSizeSecs);
     }
 
     private void writeDataToFile(File f) {
@@ -368,6 +377,7 @@ public class OptionsPane extends JFrame implements ActionListener {
         data.keyboardLocation = Integer.parseInt(KeyboardLocationTextField.getText());
         data.WindowXSize = Integer.parseInt(WindowXSizeValue.getText());
         data.WindowYSize = Integer.parseInt(WindowYSizeValue.getText());
+        data.StepSizeSecs = Integer.parseInt(StepSizeSecsValue.getText());
 
         Bus.VIA_ADDRESS = data.VIA_Address;
         boolean gpuWasVisible = EaterEmulator.gpu.isVisible();
@@ -425,6 +435,10 @@ public class OptionsPane extends JFrame implements ActionListener {
         GPUModeOptionLabel.setBounds(225,240,75,25);
         GPUModeOptionTextField.setBounds(300,240,25,25);
 
+
+        StepSizeSecsLabel.setBounds(350,240,200,25);
+        StepSizeSecsValue.setBounds(500,240,50,25);
+
         GPUBitmapPixelScaleLabel.setBounds(150,280,150,25);
         GPUBitmapPixelScaleTextField.setBounds(300,280,25,25);
 
@@ -450,6 +464,7 @@ public class OptionsPane extends JFrame implements ActionListener {
         WindowXSizeValue.setBounds(300,600,125,25);;
         WindowYSizeValue.setBounds(435,600,125,25);;        
 
+        
 
         applyOptionsButton.setBounds(200,645,150,25);
         saveOptionsButton.setBounds(350,645,150,25);

@@ -32,6 +32,7 @@ public class EaterEmulator extends JFrame implements ActionListener {
 	public static boolean slowerClock = false;
 	public static boolean running = false;
 	public static boolean keyboardMode = false;			//False = controls (default), True = keyboard
+	public static boolean singleStep = false;
 	
 	//Emulator Things
 	public static EaterEmulator emu;
@@ -111,6 +112,11 @@ public class EaterEmulator extends JFrame implements ActionListener {
 						Thread.sleep(1);
 					} catch (InterruptedException e) {e.printStackTrace();}
 	        	}
+				if (EaterEmulator.singleStep) {
+					try {
+						Thread.sleep(options.data.StepSizeSecs*1000);
+					} catch (InterruptedException e) {e.printStackTrace();}
+				}
 	        }
 	    });
 		clockThread.start();

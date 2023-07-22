@@ -20,8 +20,9 @@ public class OptionsData implements Serializable {
     boolean lcdBigMode = false;
     Color bgColor = Color.blue;
 	Color fgColor = Color.white;
-    int WindowXSize = 1800;
-    int WindowYSize = 736;
+    int WindowXSize = 1200;
+    int WindowYSize = 900;
+    int StepSizeSecs = 2;
     
     @Override
     public String toString() {
@@ -37,6 +38,7 @@ public class OptionsData implements Serializable {
         "LCD Mode: "+(lcdBigMode ? "20x4" : "16x2")+"\n"+
         "Background Color: "+bgColor.toString()+"\n"+
         "Foreground Color: "+fgColor.toString()+"\n"+
-        "Window Size: "+WindowXSize+"x"+WindowYSize+"\n";
+        "Window Size: "+WindowXSize+"x"+WindowYSize+"\n"+
+        "Step Size (secs):"+StepSizeSecs;
     }
 }

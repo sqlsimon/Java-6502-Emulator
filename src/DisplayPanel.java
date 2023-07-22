@@ -71,7 +71,8 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
         //Clocks
         g.drawString("Clocks: "+EaterEmulator.clocks, 40, 80);
         g.drawString("Speed: "+EaterEmulator.cpu.ClocksPerSecond+" Hz"+(EaterEmulator.slowerClock ? " (Slow)" : ""), 40, 110);
-        
+        g.drawString("Clock Step (secs): "+EaterEmulator.options.data.StepSizeSecs, 200,110);
+
         //PAGE INDICATORS
         g.drawString("(K) <-- "+ROMLoader.byteToHexString((byte)(romPage+0x80))+" --> (L)", rightAlignHelper-404, Math.max(getHeight()-91, EaterEmulator.options.data.WindowYSize-100));
         g.drawString("(H) <-- "+ROMLoader.byteToHexString((byte)ramPage)+" --> (J)", rightAlignHelper-724, Math.max(getHeight()-91, EaterEmulator.options.data.WindowYSize-100));
@@ -260,6 +261,7 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
 					EaterEmulator.via.CA1();
 					break;
 				case 't':
+					EaterEmulator.singleStep = !EaterEmulator.singleStep;
 					// here we need to put the 1 step clock
 					// could just write a loop to call 
 					// EaterEmulator.cpu.clock();
