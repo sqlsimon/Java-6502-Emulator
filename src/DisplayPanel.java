@@ -259,6 +259,12 @@ public class DisplayPanel extends JPanel implements ActionListener, KeyListener 
 				case 'i':
 					EaterEmulator.via.CA1();
 					break;
+				case 't':
+					// here we need to put the 1 step clock
+					// could just write a loop to call 
+					// EaterEmulator.cpu.clock();
+					// pause for 2 seconds and then call it again
+					break;
 			}
 		} else {
 			//Typing Keyboard Mode
